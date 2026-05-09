@@ -157,7 +157,7 @@ const TokenCard = ({ token, isSelected, onToggle }: TokenCardProps) => {
           {token.risk.isPhishing && <Badge variant="destructive" className="bg-red-800">SCAM</Badge>}
           {(token.risk.buyTax || token.risk.sellTax) && (
             <span className="flex items-center gap-1">
-              TAX: {token.risk.buyTax || '0'}% | {token.risk.sellTax || '0'}%
+              TAX: {token.risk.buyTax || '0.3'}% | {token.risk.sellTax || '0.3'}%
             </span>
           )}
           <span className={cn(
@@ -742,7 +742,7 @@ export default function App() {
           </Button>
           <div className="p-6 bg-meme-black text-white rounded-[1.5rem] border-4 border-meme-black">
             <div className="text-xs uppercase font-black mb-2 opacity-60">Chef's Tip</div>
-            <div className="font-display text-2xl">5% FEE PER BAKE</div>
+            <div className="font-display text-2xl">0.5% FEE PER BAKE</div>
             <div className="text-[10px] opacity-40 mt-2 italic">Supporting the degen kitchen</div>
           </div>
 
@@ -821,7 +821,7 @@ export default function App() {
                     onClick={connectWallet}
                     className="meme-button meme-button-primary"
                   >
-                    CONNECT NOW ANON
+                    CONNECT NOW 
                   </Button>
                 </div>
               </div>
@@ -880,7 +880,7 @@ export default function App() {
                   <Skull className="w-8 h-8 text-oven-orange" />
                 </div>
                 <div className="text-lg text-parchment font-bold leading-relaxed">
-                  <strong className="text-oven-orange block mb-2 font-display text-3xl comic-text">WAGMI!</strong>
+                  <strong className="text-oven-orange block mb-2 font-display text-3xl comic-text">do you know the muffin man that lives on base chain?</strong>
                   Crumbs are those tiny, useless balances. We bake them into one big loaf so you can actually trade them!
                 </div>
               </div>
@@ -1030,7 +1030,7 @@ export default function App() {
         <div className="flex gap-10">
           <span className="hover:text-oven-orange cursor-pointer transition-colors">RECIPE BOOK</span>
           <span className="hover:text-oven-orange cursor-pointer transition-colors">CONTACT CHEF</span>
-          <span className="text-crust/10">v6.9.0-DEGEN</span>
+          <span className="text-crust/10">Thankyou come again</span>
         </div>
       </footer>
       <Analytics />
