@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 /**
  * @title CrustFundSweeper
  * @dev A degen-grade crumb (dust) converter that swaps multiple ERC20 tokens 
- * for native ETH/Currency and takes a 5% Chef's Fee.
+ * for native ETH/Currency and takes a Chef's Fee.
  */
 
 interface IERC20 {
