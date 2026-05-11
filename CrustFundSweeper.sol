@@ -51,7 +51,7 @@ contract CrustFundSweeper is ReentrancyGuard {
     event CrumbsBaked(address indexed user, uint256 totalReceived, uint256 feeTaken);
     event ChefChanged(address indexed oldChef, address indexed newChef);
 
-    constructor(address _router, address _chef) {
+    constructor(address _router, address _chef) payable {
         require(_router != address(0), "Invalid router");
         require(_chef != address(0), "Invalid chef");
         router = IUniswapV2Router(_router);
@@ -74,16 +74,22 @@ contract CrustFundSweeper is ReentrancyGuard {
         uint256[] calldata amountsIn,
         uint256[] calldata minAmountsOut
     ) external nonReentrant {
-        require(tokens.length == amountsIn.length && tokens.length == minAmountsOut.length, "Array mismatch");
-        require(tokens.length > 0, "No tokens provided");
+        require(tokens.length == amountsIn.length, "Tokens and amountsIn array length mismatch");
+        require(tokens.length == minAmountsOut.length, "Tokens and minAmountsOut array length mismatch");
+        require(tokens.length != 0, "No tokens provided");
         
         uint256 totalNativeReceived = 0;
         address weth = router.WETH();
 
-        for (uint256 i = 0; i < tokens.length; i++) {
+        for (uint256 i = 0; i < tokens.length; ) {
             address token = tokens[i];
             uint256 amount = amountsIn[i];
-            if (amount == 0) continue;
+            if (amount == 0) {
+                unchecked {
+                    i++;
+                }
+                continue;
+            }
 
             // 1. Pull tokens from user (User must have approved this contract first)
             require(IERC20(token).transferFrom(msg.sender, address(this), amount), "Transfer failed");
@@ -109,9 +115,13 @@ contract CrustFundSweeper is ReentrancyGuard {
 
             uint256 received = address(this).balance - balanceBefore;
             totalNativeReceived += received;
+
+            unchecked {
+                i++;
+            }
         }
 
-        require(totalNativeReceived > 0, "No value received");
+        require(totalNativeReceived != 0, "No value received");
 
         // 5. Calculate and take the Chef's Fee (5%)
         uint256 feeAmount = (totalNativeReceived * FEE_BPS) / 10000;
@@ -132,6 +142,7 @@ contract CrustFundSweeper is ReentrancyGuard {
      */
     function setChef(address _newChef) external onlyChef {
         require(_newChef != address(0), "Chef cannot be zero address");
+        require(_newChef != chef, "New chef must be different from current chef");
         emit ChefChanged(chef, _newChef);
         chef = _newChef;
     }
